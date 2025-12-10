@@ -6,6 +6,7 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.DatePicker?>
 
 <VBox xmlns:fx="http://javafx.com/fxml"
       fx:controller="com.example.roy_2207099_crictrack_desktop.CreateMatchController"
@@ -38,6 +39,17 @@
             <TextField fx:id="txtOvers"
                        promptText="20"
                        GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+
+            <Label text="Stadium:" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
+            <TextField fx:id="txtStadium"
+                       promptText="Stadium Name"
+                       GridPane.rowIndex="3" GridPane.columnIndex="1"/>
+
+            <Label text="Date:" GridPane.rowIndex="4" GridPane.columnIndex="0"/>
+            <DatePicker fx:id="datepicker"
+                        promptText="Select Match Date"
+                        GridPane.rowIndex="4" GridPane.columnIndex="1"/>
+
         </GridPane>
 
         <Button text="Start Match"

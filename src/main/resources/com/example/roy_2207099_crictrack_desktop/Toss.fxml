@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox alignment="CENTER" spacing="20" style="-fx-padding: 30; -fx-background-color: #f4f6f9;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.roy_2207099_crictrack_desktop.TossController">
+
+    <Label style="-fx-font-size: 26px; -fx-font-weight: bold; -fx-text-fill: #2196F3;" text="Player Entry and Toss Result" />
+
+    <HBox alignment="CENTER" spacing="40">
+        <VBox spacing="10">
+            <Label fx:id="lblteamA" style="-fx-font-size: 18px; -fx-font-weight: bold;" />
+            <VBox fx:id="teamAList" spacing="5" />
+        </VBox>
+        <VBox spacing="10">
+            <Label fx:id="lblteamB" style="-fx-font-size: 18px; -fx-font-weight: bold;" />
+            <VBox fx:id="teamBList" spacing="5" />
+        </VBox>
+
+    </HBox>
+
+    <Separator />
+
+    <!-- Toss Section -->
+    <VBox alignment="CENTER" spacing="10">
+        <Label style="-fx-font-size: 18px; -fx-font-weight: bold;" text="Toss Results" />
+
+        <HBox alignment="CENTER" spacing="15">
+            <Label text="Toss Winner:" />
+            <RadioButton fx:id="rbTeamA" />
+            <RadioButton fx:id="rbTeamB" />
+        </HBox>
+
+        <HBox alignment="CENTER" spacing="15">
+            <Label text="Decision:" />
+            <RadioButton fx:id="rbBat" text="Bat" />
+            <RadioButton fx:id="rbBowl" text="Bowl" />
+        </HBox>
+    </VBox>
+
+    <Button fx:id="btnContinue" onAction="#onContinue" style="-fx-padding: 10 30; -fx-font-size: 18px;                    -fx-background-color: #2196F3; -fx-text-fill: white;                    -fx-background-radius: 10;" text="Continue" />
+
+</VBox>

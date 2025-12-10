@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.example.roy_2207099_crictrack_desktop.CreateMatchController"
+      spacing="25"
+      alignment="CENTER"
+      stylesheets="@CreateMatch.css"
+      style="-fx-background-color: #f4f6f9; -fx-padding: 40;">
+
+    <VBox spacing="20"
+          alignment="CENTER"
+          styleClass="card-box">
+
+        <Label text="Create New Match"
+               styleClass="match-button"/>
+
+        <GridPane hgap="20" vgap="15">
+            <padding><Insets top="10" bottom="10"/></padding>
+
+            <Label text="Team A:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+            <TextField fx:id="txtTeamA"
+                       promptText="Enter Team A name"
+                       GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+
+            <Label text="Team B:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+            <TextField fx:id="txtTeamB"
+                       promptText="Enter Team B name"
+                       GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+
+            <Label text="Overs:" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+            <TextField fx:id="txtOvers"
+                       promptText="20"
+                       GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+        </GridPane>
+
+        <Button text="Start Match"
+                fx:id="btnStart"
+                onAction="#onStartMatch"
+                styleClass="start-match"/>
+
+        <Button text="Back"
+                fx:id="btnBack"
+                onAction="#onBack"
+                styleClass="back-button"/>
+
+    </VBox>
+
+</VBox>

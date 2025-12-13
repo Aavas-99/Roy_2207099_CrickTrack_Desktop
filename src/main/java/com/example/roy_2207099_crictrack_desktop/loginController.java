@@ -11,7 +11,7 @@ public class loginController {
 
     @FXML
     private void onAdminLogin() {
-
+        loadScene("AdminLogin.fxml", "Admin Login");
     }
 
     @FXML
@@ -22,6 +22,25 @@ public class loginController {
     @FXML
     private void onUserRegister() {
 
+    }
+
+    private void loadScene(String fxmlFile, String title) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlFile));
+            Scene scene = new Scene(loader.load());
+
+            // Get current stage
+            Stage stage = (Stage) Stage.getWindows()
+                    .filtered(window -> window.isShowing())
+                    .get(0);
+
+            stage.setScene(scene);
+            stage.setTitle(title);
+            stage.show();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 }

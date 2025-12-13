@@ -63,9 +63,13 @@ public class CreateMatchController {
     }
 
     @FXML
-    private void onBack() {
+    private void onBack() throws IOException {
         Stage stage = (Stage) txtTeamA.getScene().getWindow();
-        stage.close();
+        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("AdminLogin.fxml"));
+        Scene scene= new Scene(fxmlLoader.load());
+        stage.setTitle("Admin Login!");
+        stage.setScene(scene);
+        stage.show();
     }
 
     private void showAlert(String title, String msg) {

@@ -29,7 +29,6 @@ public class loginController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlFile));
             Scene scene = new Scene(loader.load());
 
-            // Get current stage
             Stage stage = (Stage) Stage.getWindows()
                     .filtered(window -> window.isShowing())
                     .get(0);

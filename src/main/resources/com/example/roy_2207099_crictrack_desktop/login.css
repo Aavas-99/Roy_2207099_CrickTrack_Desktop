@@ -2,14 +2,12 @@
     -fx-font-family: "Segoe UI", Arial;
 }
 
-/* App Title */
 .title {
     -fx-font-size: 30px;
     -fx-font-weight: bold;
     -fx-text-fill: #1e88e5;
 }
 
-/* Common button style */
 .login-btn {
     -fx-background-color: linear-gradient(#42a5f5, #1e88e5);
     -fx-text-fill: white;

@@ -14,9 +14,9 @@
       fx:controller="com.example.roy_2207099_crictrack_desktop.AdminLoginController"
       style="-fx-background-color: linear-gradient(to bottom, #e3f2fd, #ffffff); -fx-padding: 40;">
 
-    <!-- Card -->
     <VBox spacing="18"
           alignment="CENTER"
+          stylesheets="@login.css"
           style="-fx-background-color: white;
                  -fx-padding: 30;
                  -fx-background-radius: 18;
@@ -37,20 +37,12 @@
         <PasswordField fx:id="txtPassword"
                        promptText="Password"
                        prefWidth="260"
-                       style="-fx-background-radius: 10;
-                              -fx-padding: 10;
-                              -fx-font-size: 14;" />
+                       styleClass="password-field" />
 
         <Button text="Login"
                 prefWidth="260"
                 onAction="#onLogin"
-                style="-fx-background-color: #1e88e5;
-                       -fx-text-fill: white;
-                       -fx-font-size: 16;
-                       -fx-font-weight: bold;
-                       -fx-background-radius: 20;
-                       -fx-padding: 10;
-                       -fx-cursor: hand;" />
+                styleClass="login"/>
 
     </VBox>
 

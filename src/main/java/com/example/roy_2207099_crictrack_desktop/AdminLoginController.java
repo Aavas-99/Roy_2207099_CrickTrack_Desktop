@@ -19,25 +19,23 @@ public class AdminLoginController {
 
     @FXML
     private void onLogin() {
-        String username = txtEmail.getText().trim();
+        String email = txtEmail.getText().trim();
         String password = txtPassword.getText().trim();
 
-        if (username.isEmpty() || password.isEmpty()) {
+        if (email.isEmpty() || password.isEmpty()) {
             showAlert("Error", "Username and Password required!");
             return;
         }
-
-        // Check admin credentials
-        if (username.equals(ADMIN_EMAIL) && password.equals(ADMIN_PASSWORD)) {
-            loadCreateMatch();
+        if (email.equals(ADMIN_EMAIL) && password.equals(ADMIN_PASSWORD)) {
+            loadhelloview();
         } else {
             showAlert("Login Failed", "Invalid Admin Credentials!");
         }
     }
 
-    private void loadCreateMatch() {
+    private void loadhelloview() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("CreateMatch.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("hello-view.fxml"));
             Scene scene = new Scene(loader.load());
 
             Stage stage = (Stage) txtEmail.getScene().getWindow();

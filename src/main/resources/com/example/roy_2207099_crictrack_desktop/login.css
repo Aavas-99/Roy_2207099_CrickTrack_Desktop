@@ -1,0 +1,31 @@
+.root {
+    -fx-font-family: "Segoe UI", Arial;
+}
+
+/* App Title */
+.title {
+    -fx-font-size: 30px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #1e88e5;
+}
+
+/* Common button style */
+.login-btn {
+    -fx-background-color: linear-gradient(#42a5f5, #1e88e5);
+    -fx-text-fill: white;
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-padding: 12 30;
+    -fx-background-radius: 25;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.25), 8, 0.3, 0, 4);
+}
+
+.login-btn:hover {
+    -fx-background-color: linear-gradient(#64b5f6, #1976d2);
+}
+
+.login-btn:pressed {
+    -fx-scale-x: 0.96;
+    -fx-scale-y: 0.96;
+}

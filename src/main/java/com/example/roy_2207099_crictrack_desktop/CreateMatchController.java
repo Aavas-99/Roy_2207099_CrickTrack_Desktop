@@ -42,12 +42,10 @@ public class CreateMatchController {
             return;
         }
 
-        // Load next screen
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("Toss.fxml"));
             Scene scene = new Scene(loader.load());
 
-            // Pass data to next controller
             TossController controller = loader.getController();
             controller.receiveMatchData(teamA, teamB, overs, stadium, date);
 
@@ -56,7 +54,6 @@ public class CreateMatchController {
             stage.setTitle("Players & Toss Setup");
             stage.show();
 
-            // Optional: close current window
             ((Stage) txtTeamA.getScene().getWindow()).close();
 
         } catch (IOException e) {
@@ -65,7 +62,6 @@ public class CreateMatchController {
         }
     }
 
-    // Back button
     @FXML
     private void onBack() {
         Stage stage = (Stage) txtTeamA.getScene().getWindow();

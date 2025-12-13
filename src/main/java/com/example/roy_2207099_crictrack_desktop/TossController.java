@@ -54,7 +54,7 @@ public class TossController {
     }
 
     private void generatePlayerInputs() {
-        for (int i = 1; i <= 11; i++) {
+        for (int i = 1; i <= 6; i++) {
             TextField a = new TextField();
             a.setPromptText("Player " + i);
             teamAList.getChildren().add(a);

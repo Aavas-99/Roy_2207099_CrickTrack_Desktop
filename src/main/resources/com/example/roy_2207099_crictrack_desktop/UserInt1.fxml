@@ -14,7 +14,7 @@
 
         <Button fx:id="UserHistory" onAction="#onHistoryClick" styleClass="neon-btn" text="View Match List" />
 
-        <Button fx:id="btnExit" onAction="#onExitClick" styleClass="exit-button" text="Exit" />
+        <Button fx:id="btnExit" onAction="#onLogOutClick" styleClass="exit-button" text="Log Out" />
 
     </VBox>
 

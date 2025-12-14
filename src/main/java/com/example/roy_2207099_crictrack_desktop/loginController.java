@@ -16,7 +16,7 @@ public class loginController {
 
     @FXML
     private void onUserLogin() {
-
+        loadScene("UserLogin.fxml", "User Login");
     }
 
     @FXML

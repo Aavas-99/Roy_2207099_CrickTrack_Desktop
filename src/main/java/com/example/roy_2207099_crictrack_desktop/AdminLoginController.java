@@ -1,5 +1,6 @@
 package com.example.roy_2207099_crictrack_desktop;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -55,5 +56,19 @@ public class AdminLoginController {
         alert.setHeaderText(null);
         alert.setContentText(msg);
         alert.show();
+    }
+
+    public void onBack(ActionEvent actionEvent) {
+        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("login.fxml"));
+        try {
+            Scene scene= new Scene(fxmlLoader.load());
+            Stage stage = (Stage) txtEmail.getScene().getWindow();
+            stage.setTitle("Login!");
+            stage.setScene(scene);
+            stage.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+            showAlert("Error", "Cannot load Login page!");
+        }
     }
 }

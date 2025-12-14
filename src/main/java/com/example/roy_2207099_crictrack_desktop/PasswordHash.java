@@ -19,4 +19,8 @@ public class PasswordHash {
             throw new RuntimeException("Password hashing error");
         }
     }
+
+    public static boolean verifyPassword(String inputPassword, String storedHash) {
+        return hashPassword(inputPassword).equals(storedHash);
+    }
 }

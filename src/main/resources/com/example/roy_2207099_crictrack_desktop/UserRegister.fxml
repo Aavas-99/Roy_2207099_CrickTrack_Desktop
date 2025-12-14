@@ -9,22 +9,15 @@
 <VBox alignment="CENTER" spacing="20" style="-fx-background-color: linear-gradient(to bottom, #e3f2fd, #ffffff); -fx-padding: 40;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.roy_2207099_crictrack_desktop.UserRegisterController">
 
 
-        <VBox alignment="CENTER"
-              spacing="18"
-              maxWidth="380"
-              style="-fx-background-color: white;
-                 -fx-padding: 30;
-                 -fx-background-radius: 18;
-                 -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.25), 15, 0.3, 0, 5);">
-            <Label style="-fx-font-size: 26px;
-        -fx-font-weight: bold;
-        -fx-text-fill: #1e88e5;" text="User Register" />
+        <VBox alignment="CENTER" maxWidth="380" spacing="18" style="-fx-background-color: white;                  -fx-padding: 30;                  -fx-background-radius: 18;                  -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.25), 15, 0.3, 0, 5);">
+            <Label style="-fx-font-size: 26px;         -fx-font-weight: bold;         -fx-text-fill: #1e88e5;" text="User Register" />
 
             <TextField fx:id="UserEmail" prefWidth="260" promptText="Email" style="-fx-background-radius: 10;                           -fx-padding: 10;                           -fx-font-size: 14;" />
 
             <PasswordField fx:id="UserPassword" prefWidth="260" promptText="Password" styleClass="password-field" />
 
             <Button onAction="#onRegister" prefWidth="260" styleClass="login" text="Register" />
+      <Button onAction="#onBack" prefWidth="260" styleClass="login" text="Back" />
 
         </VBox>
 

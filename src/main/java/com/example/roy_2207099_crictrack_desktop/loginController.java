@@ -21,7 +21,7 @@ public class loginController {
 
     @FXML
     private void onUserRegister() {
-
+        loadScene("UserRegister.fxml", "User Registration");
     }
 
     private void loadScene(String fxmlFile, String title) {

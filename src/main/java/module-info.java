@@ -10,6 +10,8 @@ module com.example.roy_2207099_crictrack_desktop {
     requires org.kordamp.bootstrapfx.core;
     requires eu.hansolo.tilesfx;
     requires com.almasb.fxgl.all;
+    requires java.sql;
+    requires org.xerial.sqlitejdbc;
 
     opens com.example.roy_2207099_crictrack_desktop to javafx.fxml;
     exports com.example.roy_2207099_crictrack_desktop;

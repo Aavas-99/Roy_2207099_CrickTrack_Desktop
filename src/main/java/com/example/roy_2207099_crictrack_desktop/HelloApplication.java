@@ -10,6 +10,12 @@ import java.io.IOException;
 public class HelloApplication extends Application {
     @Override
     public void start(Stage stage) throws IOException {
+        try{
+            Database.init();
+        } catch (Exception e){
+            e.printStackTrace();
+            System.out.println("Failed to initialize database.");
+        }
         FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("login.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
         stage.setTitle("CrickTrack!");

@@ -1,8 +1,11 @@
 package com.example.roy_2207099_crictrack_desktop;
 
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 
 import java.util.ArrayList;
 
@@ -12,16 +15,6 @@ public class TossController {
     @FXML private VBox teamBList;
     @FXML private Label lblteamA;
     @FXML private Label lblteamB;
-
-    private String tA;
-    private String tB;
-    public void setTeams(String tA, String tB) {
-        this.tA = tA;
-        this.tB = tB;
-
-        lblteamA.setText(tA);
-        lblteamB.setText(tB);
-    }
 
     @FXML private RadioButton rbTeamA;
     @FXML private RadioButton rbTeamB;
@@ -35,8 +28,8 @@ public class TossController {
     private String teamA, teamB, stadium, date;
     private int overs;
 
-    ArrayList<TextField> teamAPlayers = new ArrayList<>();
-    ArrayList<TextField> teamBPlayers = new ArrayList<>();
+    private ArrayList<TextField> teamAPlayers = new ArrayList<>();
+    private ArrayList<TextField> teamBPlayers = new ArrayList<>();
 
     public void receiveMatchData(String tA, String tB, int ov, String st, String dt) {
         this.teamA = tA;
@@ -44,6 +37,7 @@ public class TossController {
         this.overs = ov;
         this.stadium = st;
         this.date = dt;
+
         lblteamA.setText(teamA);
         lblteamB.setText(teamB);
         rbTeamA.setText(teamA);
@@ -54,6 +48,11 @@ public class TossController {
     }
 
     private void generatePlayerInputs() {
+        teamAList.getChildren().clear();
+        teamBList.getChildren().clear();
+        teamAPlayers.clear();
+        teamBPlayers.clear();
+
         for (int i = 1; i <= 6; i++) {
             TextField a = new TextField();
             a.setPromptText("Player " + i);
@@ -70,48 +69,98 @@ public class TossController {
     private void setupToggles() {
         rbTeamA.setToggleGroup(tossGroup);
         rbTeamB.setToggleGroup(tossGroup);
-
         rbBat.setToggleGroup(decisionGroup);
         rbBowl.setToggleGroup(decisionGroup);
     }
-
-
 
     @FXML
     private void onContinue() {
         for (TextField f : teamAPlayers) {
             if (f.getText().trim().isEmpty()) {
-                show("Team A must have 11 players!");
+                showAlert("Team A must have all players!");
                 return;
             }
         }
         for (TextField f : teamBPlayers) {
             if (f.getText().trim().isEmpty()) {
-                show("Team B must have 11 players!");
+                showAlert("Team B must have all players!");
                 return;
             }
         }
 
         if (tossGroup.getSelectedToggle() == null) {
-            show("Select toss winner!");
+            showAlert("Please select toss winner!");
             return;
         }
-
         if (decisionGroup.getSelectedToggle() == null) {
-            show("Select bat or bowl!");
+            showAlert("Please select Bat or Bowl!");
             return;
         }
 
         String tossWinner = rbTeamA.isSelected() ? teamA : teamB;
         String decision = rbBat.isSelected() ? "Bat" : "Bowl";
 
-        show("Success!\nToss: " + tossWinner + " chose to " + decision);
+        String battingTeam, bowlingTeam;
+        ArrayList<String> battingPlayers, bowlingPlayers;
+
+        if (decision.equals("Bat")) {
+            battingTeam = tossWinner;
+            bowlingTeam = tossWinner.equals(teamA) ? teamB : teamA;
+            battingPlayers = tossWinner.equals(teamA) ? getPlayersList(teamAPlayers) : getPlayersList(teamBPlayers);
+            bowlingPlayers = tossWinner.equals(teamA) ? getPlayersList(teamBPlayers) : getPlayersList(teamAPlayers);
+        } else {
+            bowlingTeam = tossWinner;
+            battingTeam = tossWinner.equals(teamA) ? teamB : teamA;
+            bowlingPlayers = tossWinner.equals(teamA) ? getPlayersList(teamAPlayers) : getPlayersList(teamBPlayers);
+            battingPlayers = tossWinner.equals(teamA) ? getPlayersList(teamBPlayers) : getPlayersList(teamAPlayers);
+        }
+
+        int matchId = Database.createMatch(teamA, teamB, overs, stadium, date, tossWinner, decision);
+        System.out.println("createMatch returned id=" + matchId);
+        if (matchId == -1) {
+            showAlert("Failed to create match record.");
+            return;
+        }
+
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("ScoreUpdate.fxml"));
+            Scene scene = new Scene(loader.load());
+            ScoreUpdateController controller = loader.getController();
+
+            controller.initMatchData(
+                    matchId,
+                    battingTeam, bowlingTeam,
+                    battingPlayers, bowlingPlayers,
+                    overs, stadium, date
+            );
+
+            controller.setMatchMeta(matchId, tossWinner, decision);
+
+            Stage stage = new Stage();
+            stage.setScene(scene);
+            stage.setTitle("Score Update");
+            stage.show();
+
+            ((Stage) rbTeamA.getScene().getWindow()).close();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            showAlert("Error loading ScoreUpdate scene!");
+        }
     }
 
-    private void show(String msg) {
-        Alert a = new Alert(Alert.AlertType.INFORMATION);
-        a.setHeaderText(null);
-        a.setContentText(msg);
-        a.show();
+    private ArrayList<String> getPlayersList(ArrayList<TextField> playersFields) {
+        ArrayList<String> list = new ArrayList<>();
+        for (TextField f : playersFields) {
+            list.add(f.getText().trim());
+        }
+        return list;
+    }
+
+    private void showAlert(String message) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 }

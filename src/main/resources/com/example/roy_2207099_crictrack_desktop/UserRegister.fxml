@@ -14,9 +14,11 @@
 
             <TextField fx:id="UserEmail" prefWidth="260" promptText="Email" style="-fx-background-radius: 10;                           -fx-padding: 10;                           -fx-font-size: 14;" />
 
+            <Label fx:id="emailError" text="" style="-fx-text-fill: red; -fx-font-size: 12px;" />
+
             <PasswordField fx:id="UserPassword" prefWidth="260" promptText="Password" styleClass="password-field" />
 
-            <Button onAction="#onRegister" prefWidth="260" styleClass="login" text="Register" />
+            <Button fx:id="registerButton" onAction="#onRegister" prefWidth="260" styleClass="login" text="Register" />
       <Button onAction="#onBack" prefWidth="260" styleClass="login" text="Back" />
 
         </VBox>

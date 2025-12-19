@@ -5,6 +5,8 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
@@ -23,13 +25,36 @@ public class UserRegisterController {
     private PasswordField UserPassword;
 
     @FXML
+    private Label emailError;
+
+    @FXML
+    private Button registerButton;
+
+    private void updateRegisterButtonState() {
+        String email = UserEmail == null || UserEmail.getText() == null ? "" : UserEmail.getText().trim();
+        String password = UserPassword == null || UserPassword.getText() == null ? "" : UserPassword.getText().trim();
+        boolean enable = !email.isEmpty() && !password.isEmpty() && isValidEmail(email);
+        if (registerButton != null) registerButton.setDisable(!enable);
+    }
+
+    private boolean isValidEmail(String email) {
+        String emailRegex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$";
+        return email.matches(emailRegex);
+    }
+
+    @FXML
     void onRegister(ActionEvent event) {
 
-        String email = UserEmail.getText().trim();
+        String email = UserEmail.getText().trim().toLowerCase();
         String password = UserPassword.getText().trim();
 
         if (email.isEmpty() || password.isEmpty()) {
             showAlert("Error", "All fields are required!");
+            return;
+        }
+
+        if (!isValidEmail(email)) {
+            showAlert("Invalid Email", "Please enter a valid email address!");
             return;
         }
 
@@ -46,11 +71,10 @@ public class UserRegisterController {
 
             String hashedPassword = PasswordHash.hashPassword(password);
 
-            String insertSql = "INSERT INTO users(username, password, role) VALUES(?, ?, ?)";
+            String insertSql = "INSERT INTO users(username, password) VALUES(?, ?)";
             PreparedStatement insertPs = con.prepareStatement(insertSql);
             insertPs.setString(1, email);
             insertPs.setString(2, hashedPassword);
-            insertPs.setString(3, "USER");
             insertPs.executeUpdate();
 
             showAlert("Success", "Registration successful!");
@@ -86,6 +110,39 @@ public class UserRegisterController {
         } catch (IOException e) {
             e.printStackTrace();
             showAlert("Error", "Cannot load Login page!");
+        }
+    }
+
+    @FXML
+    private void initialize() {
+        if (registerButton != null) {
+            registerButton.setDisable(true);
+        }
+
+        if (UserEmail != null) {
+            UserEmail.textProperty().addListener((obs, oldText, newText) -> {
+                String email = newText == null ? "" : newText.trim();
+                if (email.isEmpty()) {
+                    if (emailError != null) emailError.setText("");
+                    UserEmail.setStyle("");
+                    updateRegisterButtonState();
+                    return;
+                }
+
+                if (!isValidEmail(email)) {
+                    if (emailError != null) emailError.setText("Invalid email format");
+                    UserEmail.setStyle("-fx-border-color: red; -fx-border-width: 1; -fx-border-radius: 4;");
+                    if (registerButton != null) registerButton.setDisable(true);
+                } else {
+                    if (emailError != null) emailError.setText("");
+                    UserEmail.setStyle("");
+                    updateRegisterButtonState();
+                }
+            });
+        }
+
+        if (UserPassword != null) {
+            UserPassword.textProperty().addListener((obs, oldText, newText) -> updateRegisterButtonState());
         }
     }
 }

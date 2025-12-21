@@ -104,13 +104,13 @@ public class ScoreUpdateController {
         }
         strikerIndex = 0;
         nonStrikerIndex = 1;
-        currentBowlerIndex = 0;
+        currentBowlerIndex = 5;
         ensureStatsTables();
 
         if (lblStadium != null) lblStadium.setText(this.stadium == null ? "-" : this.stadium);
         if (lblTossWinner != null) lblTossWinner.setText(this.tossWinner == null ? "-" : this.tossWinner);
         if (lblDecision != null) lblDecision.setText(this.decision == null ? "-" : this.decision);
-        if (lblTarget != null) lblTarget.setText("");
+        if (lblTarget != null) lblTarget.setText("N/A");
         updateLabels();
         setupButtonHandlers();
     }
@@ -133,10 +133,11 @@ public class ScoreUpdateController {
                             if (rs != null && rs.next()) {
                                 System.out.println("ScoreUpdateController: match row found for id=" + this.matchId + ": team_a=" + rs.getString("team_a") + ", team_b=" + rs.getString("team_b") + ", toss_winner=" + rs.getString("toss_winner") + ", decision=" + rs.getString("decision") + ", first_innings_total=" + rs.getObject("first_innings_total"));
                                 Object fit = rs.getObject("first_innings_total");
-                                if (fit != null && !fit.toString().equals("null") && !firstInnings) {
+                                if (fit != null && !fit.toString().equals("null")) {
                                     try {
                                         int fitInt = Integer.parseInt(fit.toString());
-                                        if (lblTarget != null) lblTarget.setText("Target: " + (fitInt + 1));
+                                        firstInningsTotal = fitInt;
+                                        if (lblTarget != null && !firstInnings) lblTarget.setText(String.valueOf(fitInt + 1));
                                     } catch (NumberFormatException nfe) {
                                         System.out.println("ScoreUpdateController: failed to parse first_innings_total: " + nfe.getMessage());
                                     }
@@ -201,6 +202,7 @@ public class ScoreUpdateController {
     }
     private void handleBall(int runs, boolean isExtra, boolean isWicket) {
         if (strikerIndex == -1) {
+            saveStatsToDB();
             showAlert("Innings Over", "All batsmen are out!");
             return;
         }
@@ -220,6 +222,31 @@ public class ScoreUpdateController {
         } else {
             totalRuns += runs;
             bowlerStats.get(currentBowlerIndex).setRuns(bowlerStats.get(currentBowlerIndex).getRuns() + runs);
+        }
+
+        if (!firstInnings && firstInningsTotal != -1 && totalRuns > firstInningsTotal) {
+            int remainingWickets = Math.max(0, (battingPlayers != null ? battingPlayers.size() : 0) - wickets);
+            String resultText = battingTeam + " won by " + remainingWickets + " wickets";
+            saveStatsToDB();
+            if (matchId != -1) {
+                try (Connection conn = Database.getConnection()) {
+                    if (conn != null) {
+                        String update = "UPDATE matches SET result = ? WHERE id = ?";
+                        try (PreparedStatement ps = conn.prepareStatement(update)) {
+                            ps.setString(1, resultText);
+                            ps.setInt(2, matchId);
+                            ps.executeUpdate();
+                        }
+                    }
+                } catch (SQLException e) {
+                    System.out.println("Failed to save match result (early finish): " + e.getMessage());
+                }
+            }
+
+            showAlert("Match Over", "Match ended!\n" + resultText);
+            Stage stage = (Stage) lblTeamName.getScene().getWindow();
+            stage.close();
+            return;
         }
 
         if (isWicket) {
@@ -274,6 +301,7 @@ public class ScoreUpdateController {
     }
 
     private void endInnings() {
+        saveStatsToDB();
         showAlert("Innings Over", "Innings ended for " + battingTeam);
 
         if (firstInnings) {
@@ -316,51 +344,53 @@ public class ScoreUpdateController {
             }
             strikerIndex = 0;
             nonStrikerIndex = 1;
-            currentBowlerIndex = 0;
+            currentBowlerIndex = 5;
 
             if (lblTarget != null) {
                 int target = firstInningsTotal + 1;
-                lblTarget.setText("Target: " + target);
+                lblTarget.setText(String.valueOf(target));
             }
 
             updateLabels();
         } else {
 
-            String resultText = "";
-            if (firstInningsTotal == -1) {
-                resultText = "Result not available";
-            } else {
-                if (totalRuns > firstInningsTotal) {
-                    int remainingWickets = Math.max(0, (battingPlayers.size() - wickets));
-                    resultText = battingTeam + " won by " + remainingWickets + " wickets";
-                } else if (totalRuns == firstInningsTotal) {
-                    resultText = "Match tied";
-                } else {
-                    String teamFirst = firstInningsBattingTeam != null ? firstInningsBattingTeam : bowlingTeam;
-                    resultText = teamFirst + " won by " + (firstInningsTotal - totalRuns) + " runs";
-                }
-            }
+            saveStatsToDB();
 
-            if (matchId != -1) {
-                try (Connection conn = Database.getConnection()) {
-                    if (conn != null) {
-                        String update = "UPDATE matches SET result = ? WHERE id = ?";
-                        try (PreparedStatement ps = conn.prepareStatement(update)) {
-                            ps.setString(1, resultText);
-                            ps.setInt(2, matchId);
-                            ps.executeUpdate();
-                        }
-                    }
-                } catch (SQLException e) {
-                    System.out.println("Failed to save match result: " + e.getMessage());
-                }
-            }
+             String resultText = "";
+             if (firstInningsTotal == -1) {
+                 resultText = "Result not available";
+             } else {
+                 if (totalRuns > firstInningsTotal) {
+                     int remainingWickets = Math.max(0, (battingPlayers.size() - wickets));
+                     resultText = battingTeam + " won by " + remainingWickets + " wickets";
+                 } else if (totalRuns == firstInningsTotal) {
+                     resultText = "Match tied";
+                 } else {
+                     String teamFirst = firstInningsBattingTeam != null ? firstInningsBattingTeam : bowlingTeam;
+                     resultText = teamFirst + " won by " + (firstInningsTotal - totalRuns) + " runs";
+                 }
+             }
 
-            showAlert("Match Over", "Match ended!\n" + resultText);
-            Stage stage = (Stage) lblTeamName.getScene().getWindow();
-            stage.close();
-        }
-    }
+             if (matchId != -1) {
+                 try (Connection conn = Database.getConnection()) {
+                     if (conn != null) {
+                         String update = "UPDATE matches SET result = ? WHERE id = ?";
+                         try (PreparedStatement ps = conn.prepareStatement(update)) {
+                             ps.setString(1, resultText);
+                             ps.setInt(2, matchId);
+                             ps.executeUpdate();
+                         }
+                     }
+                 } catch (SQLException e) {
+                     System.out.println("Failed to save match result: " + e.getMessage());
+                 }
+             }
+
+             showAlert("Match Over", "Match ended!\n" + resultText);
+             Stage stage = (Stage) lblTeamName.getScene().getWindow();
+             stage.close();
+         }
+     }
 
     private void undoLastBall() {
         if (ballHistory.isEmpty()) return;
@@ -440,7 +470,6 @@ public class ScoreUpdateController {
     }
 
     private void saveStatsToDB() {
-        System.out.println("Saving balc haol to db");
         try (Connection conn = Database.getConnection()) {
             if (conn == null) return;
             String updateBats = "UPDATE batsman_stats SET runs = ?, balls = ?, is_out = ? WHERE name = ? AND team = ? AND match_id = ?";

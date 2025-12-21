@@ -56,6 +56,22 @@
                <RowConstraints />
             </rowConstraints>
             </GridPane>
+            <HBox spacing="10">
+                <Label text="Stadium:" style="-fx-font-weight: bold;" />
+                <Label fx:id="lblStadium" text="-" />
+            </HBox>
+            <HBox spacing="10">
+                <Label text="Toss Winner:" style="-fx-font-weight: bold;" />
+                <Label fx:id="lblTossWinner" text="-" />
+            </HBox>
+            <HBox spacing="10">
+                <Label text="Decision:" style="-fx-font-weight: bold;" />
+                <Label fx:id="lblDecision" text="-" />
+            </HBox>
+            <HBox spacing="10">
+                <Label text="Target:" style="-fx-font-weight: bold;" />
+                <Label fx:id="lblTarget" text="" />
+            </HBox>
         </VBox>
     </left>
 

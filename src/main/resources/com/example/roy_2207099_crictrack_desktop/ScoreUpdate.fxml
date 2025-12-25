@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Separator?>
@@ -70,7 +69,7 @@
             </HBox>
             <HBox spacing="10">
                 <Label text="Target:" style="-fx-font-weight: bold;" />
-                <Label fx:id="lblTarget" text="" />
+                <Label fx:id="lblTarget" text="-" />
             </HBox>
         </VBox>
     </left>

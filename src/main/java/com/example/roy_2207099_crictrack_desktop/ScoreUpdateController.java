@@ -186,6 +186,28 @@ public class ScoreUpdateController {
         tblBowlers.getItems().clear();
         tblBowlers.getItems().addAll(bowlerStats);
     }
+    private Integer askRunsWithSpinner(String title) {
+        Dialog<Integer> dialog = new Dialog<>();
+        dialog.setTitle(title);
+        dialog.setHeaderText(null);
+
+        Spinner<Integer> spinner = new Spinner<>(0, 4, 1);
+        spinner.setEditable(false);
+
+        dialog.getDialogPane().setContent(spinner);
+
+        ButtonType okBtn = new ButtonType("OK", ButtonBar.ButtonData.OK_DONE);
+        ButtonType cancelBtn = new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE);
+        dialog.getDialogPane().getButtonTypes().addAll(okBtn, cancelBtn);
+
+        dialog.setResultConverter(button -> {
+            if (button == okBtn) return spinner.getValue();
+            return null;
+        });
+
+        return dialog.showAndWait().orElse(null);
+    }
+
     private void setupButtonHandlers() {
         btn1.setOnAction(e -> handleBall(1, false, false));
         btn2.setOnAction(e -> handleBall(2, false, false));
@@ -195,8 +217,16 @@ public class ScoreUpdateController {
         btn0.setOnAction(e -> handleBall(0, false, false));
         btnWide.setOnAction(e -> handleBall(1, true, false));
         btnNoBall.setOnAction(e -> handleBall(1, true, false));
-        btnLegBye.setOnAction(e -> handleBall(1, true, false));
-        btnBye.setOnAction(e -> handleBall(1, true, false));
+        btnBye.setOnAction(e -> {
+            Integer runs = askRunsWithSpinner("Bye Runs");
+            if (runs != null) handleBall(runs, false, false);
+        });
+
+        btnLegBye.setOnAction(e -> {
+            Integer runs = askRunsWithSpinner("Leg-bye Runs");
+            if (runs != null) handleBall(runs, false, false);
+        });
+
         btnWicket.setOnAction(e -> handleBall(0, false, true));
         btnUndo.setOnAction(e -> undoLastBall());
     }

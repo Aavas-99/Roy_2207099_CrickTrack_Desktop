@@ -2,7 +2,6 @@ package com.example.roy_2207099_crictrack_desktop;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
-import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -31,6 +30,7 @@ public class ScoreUpdateController {
     private int wickets = 0;
     private int totalRuns = 0;
     private boolean firstInnings = true;
+    private boolean isFreeHit = false;
 
     private int strikerIndex = 0;
     private int nonStrikerIndex = 1;
@@ -209,39 +209,54 @@ public class ScoreUpdateController {
     }
 
     private void setupButtonHandlers() {
-        btn1.setOnAction(e -> handleBall(1, false, false));
-        btn2.setOnAction(e -> handleBall(2, false, false));
-        btn3.setOnAction(e -> handleBall(3, false, false));
-        btn4.setOnAction(e -> handleBall(4, false, false));
-        btn6.setOnAction(e -> handleBall(6, false, false));
-        btn0.setOnAction(e -> handleBall(0, false, false));
-        btnWide.setOnAction(e -> handleBall(1, true, false));
-        btnNoBall.setOnAction(e -> handleBall(1, true, false));
+        btn1.setOnAction(e -> handleBall(1, false, false, false,false));
+        btn2.setOnAction(e -> handleBall(2, false, false, false,false));
+        btn3.setOnAction(e -> handleBall(3, false, false, false,false));
+        btn4.setOnAction(e -> handleBall(4, false, false, false,false));
+        btn6.setOnAction(e -> handleBall(6, false, false, false,false));
+        btn0.setOnAction(e -> handleBall(0, false, false, false,false));
+        btnWide.setOnAction(e -> handleBall(1, true, false, false, false));
+        btnNoBall.setOnAction(e -> {handleBall(1, true, false, false,true); isFreeHit = true;});
         btnBye.setOnAction(e -> {
             Integer runs = askRunsWithSpinner("Bye Runs");
-            if (runs != null) handleBall(runs, false, false);
+            if (runs != null) {handleBall(runs, false, false,true,false);}
         });
 
         btnLegBye.setOnAction(e -> {
             Integer runs = askRunsWithSpinner("Leg-bye Runs");
-            if (runs != null) handleBall(runs, false, false);
+            if (runs != null) handleBall(runs, false, false,true,false);
         });
 
-        btnWicket.setOnAction(e -> handleBall(0, false, true));
+        btnWicket.setOnAction(e -> handleBall(0, false, true, false,false));
         btnUndo.setOnAction(e -> undoLastBall());
     }
-    private void handleBall(int runs, boolean isExtra, boolean isWicket) {
+    private void handleBall(int runs, boolean isExtra, boolean isWicket, boolean isblb,boolean isNo) {
         if (strikerIndex == -1) {
             saveStatsToDB();
             showAlert("Innings Over", "All batsmen are out!");
             return;
         }
+        boolean actualWicket = isWicket ;
+        if( isFreeHit && isWicket)
+        {
+            showAlert("Free Hit", "Cannot have a wicket on a Free Hit ball!");
+            actualWicket = false;
+        }
 
         BallEvent event = new BallEvent(strikerIndex, nonStrikerIndex, currentBowlerIndex, runs, isExtra,
-                isWicket, currentOver, currentBall, wickets, totalRuns);
+                isWicket, currentOver, currentBall, wickets, totalRuns, isblb,isNo);
         ballHistory.add(event);
-
-        if (!isExtra) {
+        if(isblb)
+        {
+            Batsman striker = batsmenStats.get(strikerIndex);
+            striker.setBalls(striker.getBalls() + 1);
+            totalRuns += runs;
+            Bowler bowler = bowlerStats.get(currentBowlerIndex);
+            bowler.setRuns(bowler.getRuns() + runs);
+            bowler.incrementBallsBowled();
+            isFreeHit = false;
+        }
+        else if (!isExtra) {
             Batsman striker = batsmenStats.get(strikerIndex);
             striker.setRuns(striker.getRuns() + runs);
             striker.setBalls(striker.getBalls() + 1);
@@ -249,8 +264,13 @@ public class ScoreUpdateController {
             Bowler bowler = bowlerStats.get(currentBowlerIndex);
             bowler.setRuns(bowler.getRuns() + runs);
             bowler.incrementBallsBowled();
+            isFreeHit = false;
         } else {
             totalRuns += runs;
+            if(isNo)
+            {
+                isFreeHit = true;
+            }
             bowlerStats.get(currentBowlerIndex).setRuns(bowlerStats.get(currentBowlerIndex).getRuns() + runs);
         }
 
@@ -279,7 +299,7 @@ public class ScoreUpdateController {
             return;
         }
 
-        if (isWicket) {
+        if (actualWicket) {
             wickets++;
             bowlerStats.get(currentBowlerIndex).setWickets(bowlerStats.get(currentBowlerIndex).getWickets() + 1);
             batsmenStats.get(strikerIndex).setOut(true);
@@ -416,11 +436,20 @@ public class ScoreUpdateController {
                  }
              }
 
-             showAlert("Match Over", "Match ended!\n" + resultText);
-             Stage stage = (Stage) lblTeamName.getScene().getWindow();
-             stage.close();
+            try {
+                javafx.fxml.FXMLLoader fxmlLoader = new javafx.fxml.FXMLLoader(getClass().getResource("hello-view.fxml"));
+                javafx.scene.Scene scene = new javafx.scene.Scene(fxmlLoader.load());
+                Stage stage = (Stage) lblTeamName.getScene().getWindow();
+
+                stage.setScene(scene);
+                stage.show();
+            } catch (java.io.IOException e) {
+                System.out.println("Error loading hello-view.fxml: " + e.getMessage());
+                e.printStackTrace();
+            }
          }
      }
+
 
     private void undoLastBall() {
         if (ballHistory.isEmpty()) return;
@@ -433,6 +462,7 @@ public class ScoreUpdateController {
         currentBall = last.ball;
         wickets = last.wickets;
         totalRuns = last.runsTotal;
+        isFreeHit= false;
         for (Batsman b : batsmenStats) {
             b.reset();
         }
@@ -441,14 +471,28 @@ public class ScoreUpdateController {
         }
 
         for (BallEvent ev : ballHistory) {
-            if (!ev.isExtra) {
+            if(ev.blb)
+            {
+                Batsman striker = batsmenStats.get(ev.strikerIndex);
+                striker.setBalls(striker.getBalls() + 1);
+                Bowler bowler = bowlerStats.get(ev.bowlerIndex);
+                bowler.setRuns(bowler.getRuns() + ev.runs);
+                bowler.incrementBallsBowled();
+                isFreeHit=false;
+            }
+            else if (!ev.isExtra) {
                 Batsman striker = batsmenStats.get(ev.strikerIndex);
                 striker.setRuns(striker.getRuns() + ev.runs);
                 striker.setBalls(striker.getBalls() + 1);
                 Bowler bowler = bowlerStats.get(ev.bowlerIndex);
                 bowler.setRuns(bowler.getRuns() + ev.runs);
                 bowler.incrementBallsBowled();
+                isFreeHit= false;
             } else {
+                if(ev.no)
+                {
+                    isFreeHit=true;
+                }
                 bowlerStats.get(ev.bowlerIndex).setRuns(bowlerStats.get(ev.bowlerIndex).getRuns() + ev.runs);
             }
             if (ev.isWicket) {
@@ -629,12 +673,12 @@ public class ScoreUpdateController {
     private static class BallEvent {
         final int strikerIndex, nonStrikerIndex, bowlerIndex;
         final int runs, over, ball, wickets, runsTotal;
-        final boolean isExtra, isWicket;
+        final boolean isExtra, isWicket, blb, no;
 
-        BallEvent(int s, int ns, int b, int r, boolean extra, boolean wicket, int o, int bl, int w, int rt) {
+        BallEvent(int s, int ns, int b, int r, boolean extra, boolean wicket, int o, int bl, int w, int rt, boolean isblb,boolean isNo) {
             strikerIndex = s; nonStrikerIndex = ns; bowlerIndex = b;
             runs = r; isExtra = extra; isWicket = wicket;
-            over = o; ball = bl; wickets = w; runsTotal = rt;
+            over = o; ball = bl; wickets = w; runsTotal = rt; blb=isblb; no=isNo;
         }
     }
 }

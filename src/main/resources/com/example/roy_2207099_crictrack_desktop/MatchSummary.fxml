@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+
+<ScrollPane fitToWidth="true" pannable="true" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.roy_2207099_crictrack_desktop.MatchSummaryController">
+
+    <GridPane hgap="20" vgap="25">
+
+        <padding>
+            <Insets bottom="20" left="20" right="20" top="20" />
+        </padding>
+
+        <VBox spacing="8" GridPane.columnIndex="0" GridPane.rowIndex="0">
+
+            <Label fx:id="lblMatchTitle" style="-fx-font-size: 22; -fx-font-weight: bold;" text="Match Summary" />
+
+            <GridPane hgap="15" vgap="5">
+                <Label text="Venue:" />
+                <Label fx:id="lblVenue" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+
+                <Label text="Date:" GridPane.columnIndex="2" />
+                <Label fx:id="lblDate" GridPane.columnIndex="3" />
+
+                <Label text="Toss:" GridPane.rowIndex="1" />
+                <Label fx:id="lblToss" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+
+                <Label text="Decision:" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                <Label fx:id="lblDecision" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+            <columnConstraints>
+               <ColumnConstraints />
+               <ColumnConstraints />
+               <ColumnConstraints />
+               <ColumnConstraints />
+            </columnConstraints>
+            <rowConstraints>
+               <RowConstraints />
+               <RowConstraints />
+            </rowConstraints>
+            </GridPane>
+        </VBox>
+
+        <VBox spacing="10" GridPane.columnIndex="0" GridPane.rowIndex="1">
+
+            <Label fx:id="lblFirstInnings" style="-fx-font-size: 18; -fx-font-weight: bold;" text="1st Innings" />
+         <Label fx:id="firstTotal" text="Label" />
+
+            <TableView fx:id="tblFirstBatsmen" prefHeight="170">
+                <columns>
+                    <TableColumn fx:id="colFBName" prefWidth="200" text="Batsman" />
+                    <TableColumn fx:id="colFBRuns" prefWidth="80" text="Runs" />
+                    <TableColumn fx:id="colFBBalls" prefWidth="80" text="Balls" />
+                    <TableColumn fx:id="colFBStatus" prefWidth="120" text="Status" />
+                </columns>
+            </TableView>
+
+            <TableView fx:id="tblFirstBowlers" prefHeight="170">
+                <columns>
+                    <TableColumn fx:id="colFBowName" prefWidth="200" text="Bowler" />
+                    <TableColumn fx:id="colFBowOvers" prefWidth="80" text="Overs" />
+                    <TableColumn fx:id="colFBowRuns" prefWidth="80" text="Runs" />
+                    <TableColumn fx:id="colFBowWkts" prefWidth="80" text="Wickets" />
+                </columns>
+            </TableView>
+        </VBox>
+
+        <VBox spacing="10" GridPane.columnIndex="0" GridPane.rowIndex="2">
+
+            <Label fx:id="lblSecondInnings" style="-fx-font-size: 18; -fx-font-weight: bold;" text="2nd Innings" />
+         <Label fx:id="secondTotal" text="Label" />
+
+            <TableView fx:id="tblSecondBatsmen" prefHeight="170">
+                <columns>
+                    <TableColumn fx:id="colSBName" prefWidth="200" text="Batsman" />
+                    <TableColumn fx:id="colSBRuns" prefWidth="80" text="Runs" />
+                    <TableColumn fx:id="colSBBalls" prefWidth="80" text="Balls" />
+                    <TableColumn fx:id="colSBStatus" prefWidth="120" text="Status" />
+                </columns>
+            </TableView>
+
+            <TableView fx:id="tblSecondBowlers" prefHeight="170">
+                <columns>
+                    <TableColumn fx:id="colSBowName" prefWidth="200" text="Bowler" />
+                    <TableColumn fx:id="colSBowOvers" prefWidth="80" text="Overs" />
+                    <TableColumn fx:id="colSBowRuns" prefWidth="80" text="Runs" />
+                    <TableColumn fx:id="colSBowWkts" prefWidth="80" text="Wickets" />
+                </columns>
+            </TableView>
+        </VBox>
+
+        <Label fx:id="lblResult" style="-fx-font-size: 18; -fx-font-weight: bold; -fx-text-fill: #2e7d32;" text="Match Result" GridPane.columnIndex="0" GridPane.rowIndex="3" />
+      <columnConstraints>
+         <ColumnConstraints />
+      </columnConstraints>
+      <rowConstraints>
+         <RowConstraints />
+         <RowConstraints />
+         <RowConstraints />
+         <RowConstraints />
+      </rowConstraints>
+
+    </GridPane>
+</ScrollPane>

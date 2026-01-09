@@ -25,8 +25,12 @@ public class HelloController {
     }
 
     @FXML
-    protected void onHistoryClick() {
-
+    protected void onHistoryClick() throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("AdminDatabase.fxml"));
+        Stage stage = (Stage) btnExit.getScene().getWindow();
+        stage.setScene(new Scene(loader.load()));
+        stage.setTitle("All Match History");
+        stage.show();
     }
 
     @FXML

@@ -3,6 +3,7 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
@@ -295,8 +296,15 @@ public class ScoreUpdateController {
 
             showAlert("Match Over", "Match ended!\n" + resultText);
             Stage stage = (Stage) lblTeamName.getScene().getWindow();
-            stage.close();
-            return;
+            try {
+                javafx.fxml.FXMLLoader fxmlLoader = new javafx.fxml.FXMLLoader(getClass().getResource("hello-view.fxml"));
+                javafx.scene.Scene scene = new javafx.scene.Scene(fxmlLoader.load());
+                stage.setScene(scene);
+                stage.show();
+            } catch (java.io.IOException e) {
+                System.out.println("Error loading hello-view.fxml: " + e.getMessage());
+                e.printStackTrace();
+            }
         }
 
         if (actualWicket) {
@@ -647,6 +655,7 @@ public class ScoreUpdateController {
         public int getOvers() { return overs.get(); }
         public int getRuns() { return runsProp.get(); }
         public void setRuns(int value) { runsProp.set(value); }
+        public void setOvers(int value) { overs.set(value); }
         public int getWickets() { return wickets.get(); }
         public void setWickets(int value) { wickets.set(value); }
 
@@ -668,6 +677,8 @@ public class ScoreUpdateController {
         public String toString() {
             return name;
         }
+
+
     }
 
     private static class BallEvent {

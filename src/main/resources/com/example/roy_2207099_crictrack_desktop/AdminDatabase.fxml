@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.example.roy_2207099_crictrack_desktop.AdminDatabaseController"
+            style="-fx-background-color: #f4f6f9;">
+    <top>
+        <VBox spacing="8">
+            <padding>
+                <Insets top="15" right="15" bottom="10" left="15"/>
+            </padding>
+
+            <Label text="Match History"
+                   style="-fx-font-size: 22; -fx-font-weight: bold;" />
+
+            <Label text="Previously Played Matches"
+                   style="-fx-text-fill: #555;" />
+        </VBox>
+    </top>
+    <center>
+        <VBox spacing="10">
+            <padding>
+                <Insets top="10" right="15" bottom="15" left="15"/>
+            </padding>
+
+            <TableView fx:id="tblMatches" prefHeight="500">
+
+                <columns>
+                    <TableColumn fx:id="colMatchId"
+                                 text="Match ID"
+                                 prefWidth="80"/>
+
+                    <TableColumn fx:id="colTeams"
+                                 text="Teams"
+                                 prefWidth="220"/>
+
+                    <TableColumn fx:id="colVenue"
+                                 text="Venue"
+                                 prefWidth="160"/>
+
+                    <TableColumn fx:id="colDate"
+                                 text="Date"
+                                 prefWidth="120"/>
+
+                    <TableColumn fx:id="colResult"
+                                 text="Result"
+                                 prefWidth="200"/>
+
+                    <TableColumn fx:id="colAction"
+                                 text="Action"
+                                 prefWidth="120"/>
+                </columns>
+
+            </TableView>
+        </VBox>
+    </center>
+
+</BorderPane>

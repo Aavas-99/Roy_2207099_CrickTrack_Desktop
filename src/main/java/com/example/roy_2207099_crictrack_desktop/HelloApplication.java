@@ -16,7 +16,7 @@ public class HelloApplication extends Application {
             e.printStackTrace();
             System.out.println("Failed to initialize database.");
         }
-        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("login.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("Login.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
         stage.setTitle("CrickTrack!");
         stage.setScene(scene);

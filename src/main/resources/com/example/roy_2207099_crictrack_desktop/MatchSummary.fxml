@@ -50,7 +50,6 @@
         <VBox spacing="10" GridPane.columnIndex="0" GridPane.rowIndex="1">
 
             <Label fx:id="lblFirstInnings" style="-fx-font-size: 18; -fx-font-weight: bold;" text="1st Innings" />
-         <Label fx:id="firstTotal" text="Label" />
 
             <TableView fx:id="tblFirstBatsmen" prefHeight="170">
                 <columns>
@@ -64,7 +63,7 @@
             <TableView fx:id="tblFirstBowlers" prefHeight="170">
                 <columns>
                     <TableColumn fx:id="colFBowName" prefWidth="200" text="Bowler" />
-                    <TableColumn fx:id="colFBowOvers" prefWidth="80" text="Overs" />
+                    <TableColumn fx:id="colFBowOvers" prefWidth="80" text="Balls" />
                     <TableColumn fx:id="colFBowRuns" prefWidth="80" text="Runs" />
                     <TableColumn fx:id="colFBowWkts" prefWidth="80" text="Wickets" />
                 </columns>
@@ -74,7 +73,6 @@
         <VBox spacing="10" GridPane.columnIndex="0" GridPane.rowIndex="2">
 
             <Label fx:id="lblSecondInnings" style="-fx-font-size: 18; -fx-font-weight: bold;" text="2nd Innings" />
-         <Label fx:id="secondTotal" text="Label" />
 
             <TableView fx:id="tblSecondBatsmen" prefHeight="170">
                 <columns>
@@ -88,7 +86,7 @@
             <TableView fx:id="tblSecondBowlers" prefHeight="170">
                 <columns>
                     <TableColumn fx:id="colSBowName" prefWidth="200" text="Bowler" />
-                    <TableColumn fx:id="colSBowOvers" prefWidth="80" text="Overs" />
+                    <TableColumn fx:id="colSBowOvers" prefWidth="80" text="Balls" />
                     <TableColumn fx:id="colSBowRuns" prefWidth="80" text="Runs" />
                     <TableColumn fx:id="colSBowWkts" prefWidth="80" text="Wickets" />
                 </columns>

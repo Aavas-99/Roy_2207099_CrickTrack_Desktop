@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox spacing="15" style="-fx-background-color: #f4f6f9; -fx-padding: 20;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.roy_2207099_crictrack_desktop.PendingRequestController">
+   <Button fx:id="back" mnemonicParsing="false" onAction="#onback" text="Back" />
+
+    <Label style="-fx-font-size: 22px; -fx-font-weight: bold;" text="Pending Match Access Requests" />
+
+    <TableView fx:id="tblRequests" prefHeight="400">
+        <columns>
+            <TableColumn fx:id="colRequestId" prefWidth="80" text="Request ID" />
+            <TableColumn fx:id="colUserName" prefWidth="150" text="User Name" />
+            <TableColumn fx:id="colMatch" prefWidth="200" text="Match" />
+            <TableColumn fx:id="colStatus" prefWidth="120" text="Status" />
+            <TableColumn fx:id="colAction" prefWidth="120" text="Action" />
+        </columns>
+    </TableView>
+
+</VBox>

@@ -43,7 +43,6 @@ public class MatchSummaryController {
 
     @FXML
     public void initialize() {
-        /* Batsmen columns */
         colFBName.setCellValueFactory(new PropertyValueFactory<>("name"));
         colFBRuns.setCellValueFactory(new PropertyValueFactory<>("runs"));
         colFBBalls.setCellValueFactory(new PropertyValueFactory<>("balls"));
@@ -56,7 +55,6 @@ public class MatchSummaryController {
         colSBStatus.setCellValueFactory(c ->
                 new javafx.beans.property.SimpleStringProperty(c.getValue().isOut() ? "Out" : "Not Out"));
 
-        /* Bowlers columns */
         colFBowName.setCellValueFactory(new PropertyValueFactory<>("name"));
         colFBowOvers.setCellValueFactory(new PropertyValueFactory<>("overs"));
         colFBowRuns.setCellValueFactory(new PropertyValueFactory<>("runs"));
@@ -68,15 +66,11 @@ public class MatchSummaryController {
         colSBowWkts.setCellValueFactory(new PropertyValueFactory<>("wickets"));
     }
 
-    /* ================= LOAD MATCH ================= */
-
     public void loadMatch(int matchId) {
         loadMatchInfo(matchId);
         loadBatsmen(matchId);
         loadBowlers(matchId);
     }
-
-    /* ================= MATCH META ================= */
 
     private void loadMatchInfo(int matchId) {
         try (Connection conn = Database.getConnection()) {
@@ -113,8 +107,6 @@ public class MatchSummaryController {
         }
     }
 
-    /* ================= BATTING ================= */
-
     private void loadBatsmen(int matchId) {
         tblFirstBatsmen.getItems().clear();
         tblSecondBatsmen.getItems().clear();
@@ -143,8 +135,6 @@ public class MatchSummaryController {
         }
     }
 
-    /* ================= BOWLING ================= */
-
     private void loadBowlers(int matchId) {
         tblFirstBowlers.getItems().clear();
         tblSecondBowlers.getItems().clear();
@@ -159,7 +149,7 @@ public class MatchSummaryController {
                 ScoreUpdateController.Bowler b =
                         new ScoreUpdateController.Bowler(rs.getString("name"));
                 b.setRuns(rs.getInt("runs"));
-                b.setOvers(rs.getInt("balls_bowled") / 6); // Convert balls to overs
+                b.setOvers(rs.getInt("balls_bowled"));
                 b.setWickets(rs.getInt("wickets"));
 
                 if (rs.getString("team").equals(secondInningsTeam)) {

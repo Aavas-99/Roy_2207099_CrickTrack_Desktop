@@ -19,7 +19,16 @@ public class UserInt1Controller {
 
     @FXML
     void onHistoryClick(ActionEvent event) {
-
+        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("UserDatabase.fxml"));
+        try {
+            Scene scene = new Scene(fxmlLoader.load());
+            Stage stage = (Stage) btnExit.getScene().getWindow();
+            stage.setTitle("Match History!");
+            stage.setScene(scene);
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
     @FXML
     public void onLogOutClick(ActionEvent actionEvent) {

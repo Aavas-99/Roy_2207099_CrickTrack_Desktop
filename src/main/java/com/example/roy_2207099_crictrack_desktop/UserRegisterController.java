@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.Statement;
 
 public class UserRegisterController {
 
@@ -72,10 +73,22 @@ public class UserRegisterController {
             String hashedPassword = PasswordHash.hashPassword(password);
 
             String insertSql = "INSERT INTO users(username, password) VALUES(?, ?)";
-            PreparedStatement insertPs = con.prepareStatement(insertSql);
-            insertPs.setString(1, email);
-            insertPs.setString(2, hashedPassword);
-            insertPs.executeUpdate();
+            try (PreparedStatement insertPs = con.prepareStatement(insertSql, Statement.RETURN_GENERATED_KEYS)) {
+                insertPs.setString(1, email);
+                insertPs.setString(2, hashedPassword);
+                insertPs.executeUpdate();
+                try (ResultSet generatedKeys = insertPs.getGeneratedKeys()) {
+                    if (generatedKeys.next()) {
+                        int newUserId = generatedKeys.getInt(1);
+                        String initApprovals = "INSERT INTO match_approvals (user_id, match_id, approved) " +
+                                "SELECT ?, id, 0 FROM matches";
+                        try (PreparedStatement psInit = con.prepareStatement(initApprovals)) {
+                            psInit.setInt(1, newUserId);
+                            psInit.executeUpdate();
+                        }
+                    }
+                }
+            }
 
             showAlert("Success", "Registration successful!");
 

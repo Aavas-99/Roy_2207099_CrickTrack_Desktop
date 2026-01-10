@@ -16,6 +16,9 @@
 
         <Button fx:id="btnHistory" onAction="#onHistoryClick" styleClass="neon-btn" text="View Match History" />
 
+
+        <Button fx:id="btnPendingRequests" onAction="#onPendingRequestsClick" styleClass="neon-btn" text="Pending Requests" />
+
         <Button fx:id="btnExit" onAction="#onExitClick" styleClass="exit-button" text="Exit" />
 
     </VBox>

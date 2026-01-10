@@ -2,6 +2,7 @@ package com.example.roy_2207099_crictrack_desktop;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -127,6 +128,19 @@ public class AdminDatabaseController {
         a.setHeaderText(null);
         a.setContentText(msg);
         a.showAndWait();
+    }
+
+    public void onback(ActionEvent actionEvent) {
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("hello-view.fxml"));
+        try {
+            Scene scene = new Scene(fxmlLoader.load());
+            Stage stage = (Stage) tblMatches.getScene().getWindow();
+            stage.setTitle("CrickTrack Admin Panel");
+            stage.setScene(scene);
+            stage.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+    }
     }
 
     public static class MatchRow {

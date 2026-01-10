@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane style="-fx-background-color: #f4f6f9;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.roy_2207099_crictrack_desktop.AdminDatabaseController">
+<BorderPane style="-fx-background-color: #f4f6f9;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.roy_2207099_crictrack_desktop.UserDatabaseController">
     <top>
         <VBox spacing="8">
             <padding>
@@ -16,7 +16,7 @@
             </padding>
          <Button fx:id="back" mnemonicParsing="false" onAction="#onback" text="Back" />
 
-            <Label style="-fx-font-size: 22; -fx-font-weight: bold;" text="Match History" />
+            <Label style="-fx-font-size: 22; -fx-font-weight: bold;" text="Match List" />
 
             <Label style="-fx-text-fill: #555;" text="Previously Played Matches" />
         </VBox>
@@ -40,7 +40,7 @@
 
                     <TableColumn fx:id="colResult" prefWidth="200" text="Result" />
 
-                    <TableColumn fx:id="colAction" prefWidth="120" text="Action" />
+                    <TableColumn fx:id="colAction" prefWidth="150" text="Action" />
                 </columns>
 
             </TableView>

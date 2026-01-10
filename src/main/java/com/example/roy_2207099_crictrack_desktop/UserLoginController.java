@@ -34,17 +34,20 @@ public class UserLoginController {
 
         try (Connection con = Database.getConnection()) {
 
-            String sql = "SELECT password FROM users WHERE username=?";
+            String sql = "SELECT id, password FROM users WHERE username=?";
             PreparedStatement ps = con.prepareStatement(sql);
             ps.setString(1, email);
 
             ResultSet rs = ps.executeQuery();
 
             if (rs.next()) {
+
+                int id= rs.getInt("id");
                 String storedHash = rs.getString("password");
 
                 if (PasswordHash.verifyPassword(password, storedHash)) {
 
+                    UserSession.setUserId(id);
                     showAlert("Success", "Login successful!");
 
                     FXMLLoader loader = new FXMLLoader(getClass().getResource("UserInt1.fxml"));

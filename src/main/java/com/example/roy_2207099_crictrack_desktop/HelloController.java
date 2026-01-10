@@ -1,5 +1,6 @@
 package com.example.roy_2207099_crictrack_desktop;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -36,5 +37,18 @@ public class HelloController {
     @FXML
     protected void onExitClick() {
         System.exit(0);
+    }
+
+    public void onPendingRequestsClick(ActionEvent actionEvent) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("PendingRequest.fxml"));
+            Stage stage = (Stage) btnExit.getScene().getWindow();
+            stage.setScene(new Scene(loader.load()));
+            stage.setTitle("Pending User Requests");
+            stage.show();
+        } catch (IOException e) {
+            System.out.println("Error loading PendingRequest.fxml");
+            e.printStackTrace();
+        }
     }
 }

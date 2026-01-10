@@ -28,6 +28,7 @@ public class AdminLoginController {
             return;
         }
         if (email.equals(ADMIN_EMAIL) && password.equals(ADMIN_PASSWORD)) {
+            UserSession.setIsAdmin(true);
             loadhelloview();
         } else {
             showAlert("Login Failed", "Invalid Admin Credentials!");

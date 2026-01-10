@@ -48,6 +48,7 @@ public class UserLoginController {
                 if (PasswordHash.verifyPassword(password, storedHash)) {
 
                     UserSession.setUserId(id);
+                    UserSession.setIsAdmin(false);
                     showAlert("Success", "Login successful!");
 
                     FXMLLoader loader = new FXMLLoader(getClass().getResource("UserInt1.fxml"));

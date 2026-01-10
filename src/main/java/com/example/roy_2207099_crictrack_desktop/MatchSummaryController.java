@@ -1,6 +1,8 @@
 package com.example.roy_2207099_crictrack_desktop;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 
@@ -136,30 +138,62 @@ public class MatchSummaryController {
     }
 
     private void loadBowlers(int matchId) {
+
         tblFirstBowlers.getItems().clear();
         tblSecondBowlers.getItems().clear();
 
         try (Connection conn = Database.getConnection()) {
+
             String q = "SELECT * FROM bowler_stats WHERE match_id = ?";
             PreparedStatement ps = conn.prepareStatement(q);
             ps.setInt(1, matchId);
+
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
-                ScoreUpdateController.Bowler b =
-                        new ScoreUpdateController.Bowler(rs.getString("name"));
-                b.setRuns(rs.getInt("runs"));
-                b.setOvers(rs.getInt("balls_bowled"));
-                b.setWickets(rs.getInt("wickets"));
 
-                if (rs.getString("team").equals(secondInningsTeam)) {
-                    tblFirstBowlers.getItems().add(b);
+                ScoreUpdateController.Bowler bowler =
+                        new ScoreUpdateController.Bowler(rs.getString("name"));
+
+                bowler.setOvers(rs.getInt("balls_bowled"));
+                bowler.setRuns(rs.getInt("runs"));
+                bowler.setWickets(rs.getInt("wickets"));
+
+                String bowlerTeam = rs.getString("team");
+                if (bowlerTeam.equals(secondInningsTeam)) {
+                    tblFirstBowlers.getItems().add(bowler);
                 } else {
-                    tblSecondBowlers.getItems().add(b);
+                    tblSecondBowlers.getItems().add(bowler);
                 }
             }
+
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
-}
+
+
+    @FXML
+    public void onback(ActionEvent actionEvent) {
+        String fxmlFile;
+        String title;
+
+        if (UserSession.getIsAdmin()) {
+            fxmlFile = "AdminDatabase.fxml";
+            title = "Admin Dashboard";
+        } else {
+            fxmlFile = "UserDatabase.fxml";
+            title = "User Dashboard";
+        }
+
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlFile));
+            javafx.scene.Parent root = loader.load();
+            javafx.stage.Stage stage = (javafx.stage.Stage) lblVenue.getScene().getWindow();
+            stage.setScene(new javafx.scene.Scene(root));
+            stage.setTitle(title);
+            stage.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }}
